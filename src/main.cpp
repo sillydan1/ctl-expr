@@ -2,6 +2,7 @@
 #include "ctl_syntax_tree.h"
 #include "ctl_driver.h"
 #include "config.h"
+#include "ctl_compiler.h"
 #include <argvparse.h>
 #include <timer>
 
@@ -15,7 +16,7 @@ int main(int argc, char** argv) {
             {"scanner-trace", 's', argument_requirement::NO_ARG, "enable tracing for the scanner"},
     };
     auto cli_arguments = get_arguments(my_options, argc, argv);
-    if(cli_arguments["help"] || !cli_arguments["expression"] || !cli_arguments["driver"]) {
+    if(cli_arguments["help"] || !cli_arguments["expression"]) {
         std::cout
                 << "=================== Welcome to the " << PROJECT_NAME << " v" << PROJECT_VER << " demo ==================\n"
                 << "OPTIONS:\n"
@@ -27,6 +28,7 @@ int main(int argc, char** argv) {
     try {
         std::shared_ptr<ctl::driver> drv{};
         // TODO: Implement a basic example driver
+        drv = std::make_shared<ctl::compiler>(env);
 
         drv->trace_parsing = static_cast<bool>(cli_arguments["parser-trace"]);
         drv->trace_scanning = static_cast<bool>(cli_arguments["scanner-trace"]);
@@ -37,6 +39,11 @@ int main(int argc, char** argv) {
             std::cout << "error: " << drv->error << "\n";
             return res;
         }
+
+        auto drv_c = std::dynamic_pointer_cast<ctl::compiler>(drv);
+        for(auto& tree : drv_c->trees)
+            std::cout << tree.first << ": " << tree.second << "\n";
+        std::cout << "\n";
 
         return 0;
     } catch (std::exception& e) {

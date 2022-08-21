@@ -41,10 +41,12 @@ BISON_TARGET(ctl_parser ${CMAKE_CURRENT_BINARY_DIR}/yacc.y ${CMAKE_CURRENT_BINAR
 FLEX_TARGET(ctl_lexer ${CMAKE_CURRENT_BINARY_DIR}/lex.l ${CMAKE_CURRENT_BINARY_DIR}/scanner.cpp)
 ADD_FLEX_BISON_DEPENDENCY(ctl_lexer ctl_parser)
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
         ${BISON_ctl_parser_OUTPUTS}
         ${FLEX_ctl_lexer_OUTPUTS}
-        src/ctl_syntax_tree.cpp)
+        src/ctl_syntax_tree.cpp
+        src/ctl_compiler.cpp)
+target_link_libraries(${PROJECT_NAME} expr)
 
 add_executable(${PROJECT_NAME}_demo src/main.cpp)
-target_link_libraries(${PROJECT_NAME}_demo ${PROJECT_NAME} expr)
+target_link_libraries(${PROJECT_NAME}_demo ${PROJECT_NAME} argvparse)

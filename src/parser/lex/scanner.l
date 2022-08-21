@@ -37,3 +37,4 @@ m4_include(lexer.l)
 %%
 
 m4_include(footer.l)
+m4_include(ctl_footer.l)

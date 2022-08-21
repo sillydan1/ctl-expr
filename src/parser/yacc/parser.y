@@ -30,11 +30,11 @@ quantifier:
 
 state:
   "location"                { $$ = LIT_CTOR(ctl::location_t{$1}); }
-| exp                       { $$ = $1; }
 | state OR state            { $$ = BINOP_CTOR(_or,$1,$3); }
 | state XOR state           { $$ = BINOP_CTOR(_xor,$1,$3); }
 | state IMPLIES state       { $$ = BINOP_CTOR(_implies,$1,$3); }
 | state AND state           { $$ = BINOP_CTOR(_and,$1,$3); }
+| exp                       { $$ = $1; }
 ;
 
 m4_include(exp.y)
