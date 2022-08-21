@@ -26,6 +26,7 @@ lloc [Ll][0-9]+
 "A" return yy::parser::make_FORALL(loc);
 "E" return yy::parser::make_EXISTS(loc);
 "F" return yy::parser::make_FINALLY(loc);
+"G" return yy::parser::make_GLOBALLY(loc);
 "X" return yy::parser::make_NEXT(loc);
 "U" return yy::parser::make_UNTIL(loc);
 "W" return yy::parser::make_WEAK_UNTIL(loc);
