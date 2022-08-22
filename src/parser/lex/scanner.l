@@ -7,7 +7,7 @@ m4_include(ctl_includes.l)
 m4_include(skeleton.l)
 
 m4_include(tokens.l)
-uuid [0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}
+uuid [0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
 lloc [Ll][0-9]+
 
 %{
