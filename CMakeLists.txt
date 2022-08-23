@@ -7,10 +7,9 @@ set(CXX_STANDARD_REQUIRED ON)
 
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
-CPMAddPackage("gh:sillydan1/expr#symbol-table-extensions")
+CPMAddPackage("gh:sillydan1/expr@1.6.0")
 CPMAddPackage("gh:yalibs/yatree@1.0.1")
 CPMAddPackage("gh:yalibs/yaoverload@1.0.0")
-CPMAddPackage("gh:yalibs/yatimer@1.0.0")
 CPMAddPackage("gh:yalibs/yahashcombine@1.0.0")
 CPMAddPackage("gh:sillydan1/argvparse@1.2.3")
 
@@ -20,7 +19,6 @@ include_directories(
         ${yaoverload_SOURCE_DIR}/include
         ${yahashcombine_SOURCE_DIR}/include
         ${argvparse_SOURCE_DIR}/include
-        ${yatimer_SOURCE_DIR}/include
         ${CMAKE_CURRENT_BINARY_DIR}
         include
         src

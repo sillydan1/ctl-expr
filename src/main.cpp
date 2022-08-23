@@ -4,14 +4,12 @@
 #include "config.h"
 #include "ctl_compiler.h"
 #include <argvparse.h>
-#include <timer>
 
 int main(int argc, char** argv) {
     using namespace expr;
     symbol_table_t env{};
     std::vector<option_t> my_options = {
             {"expression", 'e',    argument_requirement::REQUIRE_ARG, "(required) provide the expression to process"},
-            // {"driver", 'd',        argument_requirement::REQUIRE_ARG, "(required) determine which driver to use [z3, interpreter, compiler]"},
             {"parser-trace", 'p',  argument_requirement::NO_ARG, "enable tracing for the parser"},
             {"scanner-trace", 's', argument_requirement::NO_ARG, "enable tracing for the scanner"},
     };
@@ -27,13 +25,10 @@ int main(int argc, char** argv) {
 
     try {
         std::shared_ptr<ctl::driver> drv{};
-        // TODO: Implement a basic example driver
         drv = std::make_shared<ctl::compiler>(env);
-
         drv->trace_parsing = static_cast<bool>(cli_arguments["parser-trace"]);
         drv->trace_scanning = static_cast<bool>(cli_arguments["scanner-trace"]);
 
-        ya::timer<int> t{};
         auto res = drv->parse(cli_arguments["expression"].as_string());
         if(res != 0) {
             std::cout << "error: " << drv->error << "\n";
