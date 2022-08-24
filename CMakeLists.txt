@@ -15,6 +15,8 @@ CPMAddPackage("gh:yalibs/yahashcombine@1.0.0")
 
 include_directories(
         ${expr_SOURCE_DIR}/include
+        ${expr_SOURCE_DIR}/src
+        ${expr_BUILD_DIR}
         ${yatree_SOURCE_DIR}/include
         ${yaoverload_SOURCE_DIR}/include
         ${yahashcombine_SOURCE_DIR}/include
