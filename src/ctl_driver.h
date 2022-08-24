@@ -2,7 +2,7 @@
 #define CTL_CTL_DRIVER_H
 #include <string>
 #include "ctl_syntax_tree.h"
-#include "parser.hpp"
+#include "ctl_parser.hpp"
 #define YY_DECL yy::parser::symbol_type yylex (ctl::driver* drv)
 YY_DECL;
 

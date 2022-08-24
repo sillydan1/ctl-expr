@@ -6,5 +6,5 @@
 #include <string>
 #include <sstream>
 #include "ctl_driver.h"
-#include "parser.hpp"
+#include "ctl_parser.hpp"
 %}

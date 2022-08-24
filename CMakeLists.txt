@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(ctl VERSION 1.0.0)
+project(ctl VERSION 1.0.1)
 configure_file(src/config.h.in config.h)
 include(cmake/CPM.cmake)
 set(CMAKE_CXX_STANDARD 20)
@@ -35,8 +35,8 @@ add_custom_command(OUTPUT
         ARGS -I ${PROJECT_SOURCE_DIR}/src/parser/yacc -I ${expr_SOURCE_DIR}/src/parser/yacc -P ${PROJECT_SOURCE_DIR}/src/parser/yacc/parser.y > ${CMAKE_CURRENT_BINARY_DIR}/yacc.y
         VERBATIM)
 
-BISON_TARGET(ctl_parser ${CMAKE_CURRENT_BINARY_DIR}/yacc.y ${CMAKE_CURRENT_BINARY_DIR}/parser.cpp)
-FLEX_TARGET(ctl_lexer ${CMAKE_CURRENT_BINARY_DIR}/lex.l ${CMAKE_CURRENT_BINARY_DIR}/scanner.cpp)
+BISON_TARGET(ctl_parser ${CMAKE_CURRENT_BINARY_DIR}/yacc.y ${CMAKE_CURRENT_BINARY_DIR}/ctl_parser.cpp DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/ctl_parser.hpp)
+FLEX_TARGET(ctl_lexer ${CMAKE_CURRENT_BINARY_DIR}/lex.l ${CMAKE_CURRENT_BINARY_DIR}/ctl_scanner.cpp DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/ctl_scanner.hpp)
 ADD_FLEX_BISON_DEPENDENCY(ctl_lexer ctl_parser)
 
 add_library(${PROJECT_NAME} SHARED
