@@ -8,10 +8,10 @@ set(CXX_STANDARD_REQUIRED ON)
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
 CPMAddPackage("gh:sillydan1/expr@1.6.0")
+CPMAddPackage("gh:sillydan1/argvparse@1.2.3")
 CPMAddPackage("gh:yalibs/yatree@1.0.1")
 CPMAddPackage("gh:yalibs/yaoverload@1.0.0")
 CPMAddPackage("gh:yalibs/yahashcombine@1.0.0")
-CPMAddPackage("gh:sillydan1/argvparse@1.2.3")
 
 include_directories(
         ${expr_SOURCE_DIR}/include

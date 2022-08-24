@@ -1,9 +1,7 @@
 #include <iostream>
-#include "ctl_syntax_tree.h"
-#include "ctl_driver.h"
 #include "config.h"
-#include "ctl_compiler.h"
 #include <argvparse.h>
+#include <ctl_compiler.h>
 
 int main(int argc, char** argv) {
     using namespace expr;
@@ -36,10 +34,9 @@ int main(int argc, char** argv) {
         }
 
         auto drv_c = std::dynamic_pointer_cast<ctl::compiler>(drv);
-        for(auto& tree : drv_c->trees)
-            std::cout << tree.first << ": " << tree.second << "\n";
-        std::cout << "\n";
+        auto ast = drv_c->ast;
 
+        std::cout << ast << std::endl;
         return 0;
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;

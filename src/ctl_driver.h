@@ -14,7 +14,6 @@ namespace ctl {
         virtual int parse(const std::string &f) = 0;
         virtual auto get_symbol(const std::string &identifier) -> syntax_tree_t = 0;
         virtual void add_tree(const ctl::syntax_tree_t& tree) = 0;
-        virtual void add_tree(const std::string& identifier, const syntax_tree_t& tree) = 0;
 
         void scan_begin();
         void scan_end();

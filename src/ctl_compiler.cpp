@@ -3,11 +3,7 @@
 namespace ctl {
     int compiler::parse(const std::string& f) {
         if (f.empty()) {
-#ifdef DEFAULT_EXPRESSION_VALUE
-            if(!std::string(DEFAULT_EXPRESSION_VALUE).empty())
-                return parse(DEFAULT_EXPRESSION_VALUE);
-#endif
-            error = "empty expression and no DEFAULT_EXPRESSION_VALUE";
+            error = "empty CTL string not allowed";
             return 1;
         }
         file = f;
@@ -32,9 +28,6 @@ namespace ctl {
         return syntax_tree_t{environment.find(identifier)};
     }
     void compiler::add_tree(const syntax_tree_t& tree) {
-        trees["expression_result"] = (tree);
-    }
-    void compiler::add_tree(const std::string& identifier, const syntax_tree_t& tree) {
-        trees[identifier] = tree;
+        ast = tree;
     }
 }
