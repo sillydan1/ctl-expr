@@ -20,12 +20,12 @@ namespace ctl {
             return 1;
         }
     }
-    auto compiler::get_symbol(const std::string& identifier) -> syntax_tree_t {
+    auto compiler::get_symbol(const std::string& identifier) -> expr::syntax_tree_t {
 #ifndef NDEBUG
         if (!environment.contains(identifier))
             throw std::out_of_range(identifier + " not found");
 #endif
-        return syntax_tree_t{environment.find(identifier)};
+        return expr::syntax_tree_t{environment.find(identifier)};
     }
     void compiler::add_tree(const syntax_tree_t& tree) {
         ast = tree;

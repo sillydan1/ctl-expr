@@ -29,20 +29,28 @@ quantifier:
 ;
 
 predicate:
-  "(" query ")" OR "(" query ")"        { $$ = BINOP_CTOR(_or,$2,$6); }
-| "(" query ")" XOR "(" query ")"       { $$ = BINOP_CTOR(_xor,$2,$6); }
-| "(" query ")" IMPLIES "(" query ")"   { $$ = BINOP_CTOR(_implies,$2,$6); }
-| "(" query ")" AND "(" query ")"       { $$ = BINOP_CTOR(_and,$2,$6); }
+  "(" query ")" OR "(" query ")"        { $$ = BINOP_CTOR (_or,$2,$6); }
+| "(" query ")" XOR "(" query ")"       { $$ = BINOP_CTOR (_xor,$2,$6); }
+| "(" query ")" IMPLIES "(" query ")"   { $$ = BINOP_CTOR (_implies,$2,$6); }
+| "(" query ")" AND "(" query ")"       { $$ = BINOP_CTOR (_and,$2,$6); }
 | "(" query ")"                         { $$ = $2; }
 | "(" predicate ")"                     { $$ = $2; }
 | state                                 { $$ = $1; }
-| exp                                   { $$ = $1; }
+| exp                                   { $$ = ctl::syntax_tree_t($1); }
 ;
 
 state:
   "location"                { $$ = LIT_CTOR(ctl::location_t{$1}); }
 ;
 
+m4_define(BINOP_CTOR, EXP_BINOP_CTOR)
+m4_define(LIT_CTOR, EXP_LIT_CTOR)
+m4_define(IDENT_CTOR, EXP_IDENT_CTOR)
+m4_define(MONOOP_CTOR, EXP_MONOOP_CTOR)
 m4_include(exp.y)
+m4_undefine(BINOP_CTOR)
+m4_undefine(LIT_CTOR)
+m4_undefine(IDENT_CTOR)
+m4_undefine(MONOOP_CTOR)
 
 %%
