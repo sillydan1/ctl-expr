@@ -1,5 +1,6 @@
 m4_changequote()
 %skeleton "lalr1.cc"
+%define api.prefix {PARSER_NS}
 %require "3.5"
 
 %define api.token.raw
@@ -30,7 +31,7 @@ m4_changequote()
 // Include the driver
 %code {
     #include "ctl_driver.h"
-    void yy::parser::error (const location_type& l, const std::string& m) {
+    void PARSER_NS ::parser::error (const location_type& l, const std::string& m) {
       std::cerr << l << ": " << m << '\n';
     }
 }

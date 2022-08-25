@@ -9,7 +9,7 @@ namespace ctl {
         file = f;
         location.initialize(&file);
         scan_begin();
-        yy::parser parse(this);
+        ctl::parser parse(this);
         parse.set_debug_level(trace_parsing);
         try {
             int res = parse();

@@ -2,7 +2,7 @@ m4_changequote()
 /*
 m4_include(../mit.license)
 */
-
+m4_define(PARSER_NS, ctl)
 m4_include(ctl_includes.l)
 m4_include(skeleton.l)
 
@@ -18,20 +18,20 @@ lloc [Ll][0-9]+
 %%
 %{
   // A handy shortcut to the location held by the driver.
-  yy::location& loc = drv->location;
+  ctl::location& loc = drv->location;
   // Code run each time yylex is called.
   loc.step();
 %}
 
-"A" return yy::parser::make_FORALL(loc);
-"E" return yy::parser::make_EXISTS(loc);
-"F" return yy::parser::make_FINALLY(loc);
-"G" return yy::parser::make_GLOBALLY(loc);
-"X" return yy::parser::make_NEXT(loc);
-"U" return yy::parser::make_UNTIL(loc);
-"W" return yy::parser::make_WEAK_UNTIL(loc);
-{uuid} return yy::parser::make_LOCATION(yytext, loc);
-{lloc} return yy::parser::make_LOCATION(yytext, loc);
+"A" return ctl::parser::make_FORALL(loc);
+"E" return ctl::parser::make_EXISTS(loc);
+"F" return ctl::parser::make_FINALLY(loc);
+"G" return ctl::parser::make_GLOBALLY(loc);
+"X" return ctl::parser::make_NEXT(loc);
+"U" return ctl::parser::make_UNTIL(loc);
+"W" return ctl::parser::make_WEAK_UNTIL(loc);
+{uuid} return ctl::parser::make_LOCATION(yytext, loc);
+{lloc} return ctl::parser::make_LOCATION(yytext, loc);
 
 m4_include(lexer.l)
 

@@ -3,7 +3,7 @@
 #include <string>
 #include "ctl_syntax_tree.h"
 #include "ctl_parser.hpp"
-#define YY_DECL yy::parser::symbol_type yylex (ctl::driver* drv)
+#define YY_DECL ctl::parser::symbol_type ctllex (ctl::driver* drv)
 YY_DECL;
 
 namespace ctl {
@@ -22,7 +22,7 @@ namespace ctl {
         std::string file;
         bool trace_parsing;
         bool trace_scanning;
-        yy::location location;
+        ctl::location location;
     };
 }
 
