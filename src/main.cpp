@@ -22,21 +22,10 @@ int main(int argc, char** argv) {
     }
 
     try {
-        std::shared_ptr<ctl::driver> drv{};
-        drv = std::make_shared<ctl::compiler>(env);
-        drv->trace_parsing = static_cast<bool>(cli_arguments["parser-trace"]);
-        drv->trace_scanning = static_cast<bool>(cli_arguments["scanner-trace"]);
-
-        auto res = drv->parse(cli_arguments["expression"].as_string());
-        if(res != 0) {
-            std::cout << "error: " << drv->error << "\n";
-            return res;
-        }
-
-        auto drv_c = std::dynamic_pointer_cast<ctl::compiler>(drv);
-        auto ast = drv_c->ast;
-
-        std::cout << ast << std::endl;
+        ctl::compiler drv{env};
+        drv.trace_parsing = static_cast<bool>(cli_arguments["parser-trace"]);
+        drv.trace_scanning = static_cast<bool>(cli_arguments["scanner-trace"]);
+        std::cout << drv.compile(cli_arguments["expression"].as_string()) << std::endl;
         return 0;
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;

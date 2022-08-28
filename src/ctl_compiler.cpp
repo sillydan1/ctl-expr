@@ -30,4 +30,11 @@ namespace ctl {
     void compiler::add_tree(const syntax_tree_t& tree) {
         ast = tree;
     }
+    auto compiler::compile(const std::string &f) -> compiled_expr_t {
+        ast = {};
+        auto res = parse(f);
+        if(res != 0)
+            throw std::logic_error("invalid CTL expression: " + error);
+        return ast;
+    }
 }

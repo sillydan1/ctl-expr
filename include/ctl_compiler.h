@@ -11,6 +11,7 @@ namespace ctl {
         auto get_symbol(const std::string &identifier) -> expr::syntax_tree_t override;
         void add_tree(const syntax_tree_t& tree) override;
         auto get_environment() const -> const expr::symbol_table_t& { return environment; }
+        auto compile(const std::string& f) -> compiled_expr_t;
 
         compiled_expr_t ast;
     protected:
