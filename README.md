@@ -26,7 +26,7 @@ expr::symbol_table_t symbols{};
 symbols["a"] = 0;
 
 // Construct the compiler
-ctl::compiler compiler{symbols};
+ctl::compiler compiler{&symbols};
 
 // Parse the CTL expression and check for syntax-success
 int result_code = compiler.parse("E F a > 3");

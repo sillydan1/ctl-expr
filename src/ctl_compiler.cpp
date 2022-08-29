@@ -21,11 +21,11 @@ namespace ctl {
         }
     }
     auto compiler::get_symbol(const std::string& identifier) -> expr::syntax_tree_t {
-#ifndef NDEBUG
-        if (!environment.contains(identifier))
-            throw std::out_of_range(identifier + " not found");
-#endif
-        return expr::syntax_tree_t{environment.find(identifier)};
+        for(auto& env : environments) {
+            if(env->contains(identifier))
+                return expr::syntax_tree_t{env->find(identifier)};
+        }
+        throw std::out_of_range(identifier + " not found");
     }
     void compiler::add_tree(const syntax_tree_t& tree) {
         ast = tree;

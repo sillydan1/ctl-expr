@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     }
 
     try {
-        ctl::compiler drv{env};
+        ctl::compiler drv{&env};
         drv.trace_parsing = static_cast<bool>(cli_arguments["parser-trace"]);
         drv.trace_scanning = static_cast<bool>(cli_arguments["scanner-trace"]);
         std::cout << drv.compile(cli_arguments["expression"].as_string()) << std::endl;
