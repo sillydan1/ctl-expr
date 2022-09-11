@@ -21,10 +21,8 @@ namespace ctl {
         }
     }
     auto compiler::get_symbol(const std::string& identifier) -> expr::syntax_tree_t {
-        for(auto& env : environments) {
-            if(env->contains(identifier))
-                return expr::syntax_tree_t{env->find(identifier)};
-        }
+        if(contains(identifier))
+            return expr::syntax_tree_t{expr::identifier_t{identifier}};
         throw std::out_of_range(identifier + " not found");
     }
     void compiler::add_tree(const syntax_tree_t& tree) {
