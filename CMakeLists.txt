@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(ctl VERSION 1.1.0)
+project(ctl VERSION 1.1.1)
 configure_file(src/config.h.in config.h)
 include(cmake/CPM.cmake)
 set(CMAKE_CXX_STANDARD 20)
@@ -7,9 +7,9 @@ set(CXX_STANDARD_REQUIRED ON)
 
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
-CPMAddPackage(NAME expr VERSION 2.1.0 GITHUB_REPOSITORY sillydan1/expr OPTIONS "ENABLE_Z3 OFF")
+CPMAddPackage(NAME expr VERSION 2.1.1 GITHUB_REPOSITORY sillydan1/expr OPTIONS "ENABLE_Z3 OFF")
 CPMAddPackage("gh:sillydan1/argvparse@1.2.3")
-CPMAddPackage("gh:yalibs/yatree@1.2.0")
+CPMAddPackage("gh:yalibs/yatree@1.2.1")
 CPMAddPackage("gh:yalibs/yaoverload@1.0.0")
 CPMAddPackage("gh:yalibs/yahashcombine@1.0.0")
 
