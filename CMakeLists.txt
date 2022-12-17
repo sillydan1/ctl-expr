@@ -7,24 +7,11 @@ set(CXX_STANDARD_REQUIRED ON)
 
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
-CPMAddPackage(NAME expr VERSION 2.1.1 GITHUB_REPOSITORY sillydan1/expr OPTIONS "ENABLE_Z3 OFF")
+CPMAddPackage(NAME expr VERSION 2.2.0 GITHUB_REPOSITORY sillydan1/expr OPTIONS "ENABLE_Z3 OFF")
 CPMAddPackage("gh:sillydan1/argvparse@1.2.3")
 CPMAddPackage("gh:yalibs/yatree@1.2.1")
 CPMAddPackage("gh:yalibs/yaoverload@1.0.0")
 CPMAddPackage("gh:yalibs/yahashcombine@1.0.0")
-
-include_directories(
-        ${expr_SOURCE_DIR}/include
-        ${expr_SOURCE_DIR}/src
-        ${expr_BUILD_DIR}
-        ${yatree_SOURCE_DIR}/include
-        ${yaoverload_SOURCE_DIR}/include
-        ${yahashcombine_SOURCE_DIR}/include
-        ${argvparse_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_BINARY_DIR}
-        include
-        src
-)
 
 add_custom_command(OUTPUT
         ${CMAKE_CURRENT_BINARY_DIR}/lex.l
@@ -46,6 +33,19 @@ add_library(${PROJECT_NAME} SHARED
         ${FLEX_ctl_lexer_OUTPUTS}
         src/ctl_syntax_tree.cpp
         src/ctl_compiler.cpp)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+        ${expr_SOURCE_DIR}/include
+        ${expr_SOURCE_DIR}/src
+        ${expr_BUILD_DIR}
+        ${yatree_SOURCE_DIR}/include
+        ${yaoverload_SOURCE_DIR}/include
+        ${yahashcombine_SOURCE_DIR}/include
+        ${argvparse_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_BINARY_DIR}
+        include
+        src)
+
 target_link_libraries(${PROJECT_NAME} expr)
 
 add_executable(${PROJECT_NAME}_demo src/main.cpp)
