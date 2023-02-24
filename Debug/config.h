@@ -1,8 +1,0 @@
-#ifndef EXPR_CONFIG_H_IN_H
-#define EXPR_CONFIG_H_IN_H
-#define PROJECT_NAME "ctl"
-#define PROJECT_VER  "1.1.1"
-#define PROJECT_VER_MAJOR 1
-#define PROJECT_VER_MINOR 1
-#define PROJECT_VER_PATCH 1
-#endif //EXPR_CONFIG_H_IN_H
