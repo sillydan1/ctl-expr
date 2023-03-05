@@ -13,11 +13,7 @@ int main(int argc, char** argv) {
     };
     auto cli_arguments = get_arguments(my_options, argc, argv);
     if(cli_arguments["help"] || !cli_arguments["expression"]) {
-        std::cout
-                << "=================== Welcome to the " << PROJECT_NAME << " v" << PROJECT_VER << " demo ==================\n"
-                << "OPTIONS:\n"
-                << my_options
-                << "======================================================================\n";
+        std::cout << PROJECT_NAME << " v" << PROJECT_VER << "\n" << "OPTIONS:\n" << my_options;
         return 0;
     }
 
