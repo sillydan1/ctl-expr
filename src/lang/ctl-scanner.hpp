@@ -1,7 +1,6 @@
 #ifndef CTL_SCANNER_HPP
 #define CTL_SCANNER_HPP
 #include "ast-factory.h"
-
 #if ! defined(yyFlexLexerOnce)
 #include <FlexLexer.h>
 #endif

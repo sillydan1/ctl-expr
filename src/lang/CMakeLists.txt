@@ -17,5 +17,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${yahashcombine_SOURCE_DIR}/include
     ${argvparse_SOURCE_DIR}/include
     .. .)
-target_link_libraries(${PROJECT_NAME} ctl)
+target_link_libraries(${PROJECT_NAME} expr)
 
