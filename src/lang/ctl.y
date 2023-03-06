@@ -86,6 +86,7 @@ predicate:
 | LPAREN query RPAREN IMPLIES LPAREN query RPAREN   { $$ = args.fct->build_operator (expr::operator_type_t::_implies,$2,$6); }
 | LPAREN query RPAREN AND LPAREN query RPAREN       { $$ = args.fct->build_operator (expr::operator_type_t::_and,$2,$6); }
 | LPAREN query RPAREN                               { $$ = args.fct->build_operator (expr::operator_type_t::parentheses, $2); }
+/* TODO: conflicts with LPAREN exp RPAREN */
 | LPAREN predicate RPAREN                           { $$ = args.fct->build_operator (expr::operator_type_t::parentheses, $2); }
 | exp                                               { $$ = $1; }
 ;
@@ -117,6 +118,7 @@ bin_op:
 
 mono_op:
   NOT exp               { $$ = args.fct->build_operator (expr::operator_type_t::_not,$2); }
+/* TODO: conflicts with LPAREN predicate RPAREN */
 | LPAREN exp RPAREN     { $$ = args.fct->build_operator (expr::operator_type_t::parentheses,$2); }
 ;
 

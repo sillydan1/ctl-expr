@@ -4,7 +4,7 @@
 
 namespace ctl {
     auto operator<<(std::ostream &o, const location_t &r) -> std::ostream & {
-        return o << r.location_name;
+        return o << r.location_name << " L";
     }
 
     auto operator<<(std::ostream &o, const modal_t &r) -> std::ostream & {

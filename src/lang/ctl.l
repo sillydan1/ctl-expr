@@ -45,6 +45,7 @@ str    \"(\\.|[^\\"])*\"
 blank  [ \t\r]
 
 uuid   [0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
+/* TODO: Conflicts with {id}! */
 lloc   [Ll][0-9]+
 
 %%
