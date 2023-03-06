@@ -18,8 +18,8 @@
         class scanner;
         struct parser_args {
             scanner* scn;
-            expr::ast_factory* fct;
-            expr::language_builder* builder;
+            ast_factory* fct;
+            language_builder* builder;
         };
     }
 }
@@ -38,14 +38,12 @@
 %token MINUS PLUS STAR SLASH PERCENT HAT AND OR XOR IMPLIES GT GE EE NE LE LT NOT LPAREN RPAREN ASSIGN TERM
 %token FORALL EXISTS FINALLY GLOBALLY NEXT UNTIL WEAK_UNTIL
 %token <std::string> IDENTIFIER LOCATION
-%token <symbol_access_modifier_t> ACCESS_MOD
-%token <symbol_type_name_t> TYPE
 %token <int> NUMBER
 %token <float> FLOAT
 %token <bool> BOOL
 %token <std::string> STRING 
-%token <clock_t> CLOCK
-%nterm <syntax_tree_t> exp bin_op mono_op lit
+%token <expr::clock_t> CLOCK
+%nterm <syntax_tree_t> query quantifier predicate exp bin_op mono_op lit
 
 %left XOR
 %left OR
@@ -75,11 +73,11 @@ query:
 ;
 
 quantifier:
-  NEXT predicate                  { $$ = args.fct->build_quantifier (ctl::quantifier_t::X, $2); }
-| GLOBALLY predicate              { $$ = args.fct->build_quantifier (ctl::quantifier_t::G, $2); }
-| FINALLY predicate               { $$ = args.fct->build_quantifier (ctl::quantifier_t::F, $2); }
-| predicate UNTIL predicate       { $$ = args.fct->build_quantifier (ctl::quantifier_t::U, $1, $3); }
-| predicate WEAK_UNTIL predicate  { $$ = args.fct->build_quantifier (ctl::quantifier_t::W, $1, $3); }
+  NEXT predicate                  { $$ = args.fct->build_quantifier (quantifier_op_t::X, $2); }
+| GLOBALLY predicate              { $$ = args.fct->build_quantifier (quantifier_op_t::G, $2); }
+| FINALLY predicate               { $$ = args.fct->build_quantifier (quantifier_op_t::F, $2); }
+| predicate UNTIL predicate       { $$ = args.fct->build_quantifier (quantifier_op_t::U, $1, $3); }
+| predicate WEAK_UNTIL predicate  { $$ = args.fct->build_quantifier (quantifier_op_t::W, $1, $3); }
 ;
 
 predicate:

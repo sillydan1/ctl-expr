@@ -52,13 +52,13 @@ lloc   [Ll][0-9]+
 {blank}+   /* nothing */
 \n+        /* nothing */
 
-"A"        return token::FORALL
-"E"        return token::EXISTS
-"F"        return token::FINALLY
-"G"        return token::GLOBALLY
-"X"        return token::NEXT
-"U"        return token::UNTIL
-"W"        return token::WEAK_UNTIL
+"A"        return token::FORALL;
+"E"        return token::EXISTS;
+"F"        return token::FINALLY;
+"G"        return token::GLOBALLY;
+"X"        return token::NEXT;
+"U"        return token::UNTIL;
+"W"        return token::WEAK_UNTIL;
 "-"        return token::MINUS;
 "+"        return token::PLUS;
 "*"        return token::STAR;
@@ -89,11 +89,11 @@ lloc   [Ll][0-9]+
                 return token::FLOAT; 
            }
 {clk}      { 
-                lval->build<expr::clock_t>(stoclk(YYText())); 
+                lval->build<expr::clock_t>(expr::stoclk(YYText())); 
                 return token::CLOCK; 
            }
 {bool}     { 
-                lval->build<bool>(stob(YYText())); 
+                lval->build<bool>(expr::stob(YYText())); 
                 return token::BOOL; 
            }
 {str}      { 
@@ -114,7 +114,7 @@ lloc   [Ll][0-9]+
                 return token::LOCATION;
            }
 <<EOF>>    return token::YYEOF;
-.          throw expr::parser::syntax_error(*loc, "invalid character: " + std::string(YYText()));
+.          throw ctl::parser::syntax_error(*loc, "invalid character: " + std::string(YYText()));
 
 %%
 

@@ -2,7 +2,7 @@
 #include "language-builder.h"
 
 namespace ctl {
-    auto multi_query_builder::add_query(const syntax_tree_t& tree) -> multi_query_builder& override {
+    auto multi_query_builder::add_query(const syntax_tree_t& tree) -> multi_query_builder& {
         result.queries.push_back(tree);
         return *this;
     }

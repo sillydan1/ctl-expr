@@ -46,8 +46,8 @@ namespace ctl {
     };
     using syntax_tree_t = ya::tree<syntax_node_t>;
     auto operator<<(std::ostream &o, const location_t &r) -> std::ostream &;
-    auto operator<<(std::ostream &o, const modal_t &r) -> std::ostream &;
-    auto operator<<(std::ostream &o, const quantifier_t &r) -> std::ostream &;
+    auto operator<<(std::ostream &o, const modal_op_t &r) -> std::ostream &;
+    auto operator<<(std::ostream &o, const quantifier_op_t &r) -> std::ostream &;
     auto operator<<(std::ostream &o, const underlying_syntax_node_t &n) -> std::ostream &;
     auto operator<<(std::ostream &o, const syntax_tree_t &t) -> std::ostream &;
 }

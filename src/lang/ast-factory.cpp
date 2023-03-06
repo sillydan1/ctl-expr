@@ -5,10 +5,10 @@ namespace ctl {
     auto ast_factory::build_modal(const modal_op_t& op, const syntax_tree_t& tree) -> syntax_tree_t {
     }
 
-    auto ast_factory::build_quantifier(const quantifier_t& op, const syntax_tree_t& child) -> syntax_tree_t {
+    auto ast_factory::build_quantifier(const quantifier_op_t& op, const syntax_tree_t& child) -> syntax_tree_t {
     }
 
-    auto ast_factory::build_quantifier(const quantifier_t& op, const syntax_tree_t& child0, const syntax_tree_t& child1) -> syntax_tree_t {
+    auto ast_factory::build_quantifier(const quantifier_op_t& op, const syntax_tree_t& child0, const syntax_tree_t& child1) -> syntax_tree_t {
         return syntax_tree_t{};
     }
 

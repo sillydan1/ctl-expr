@@ -18,15 +18,15 @@ namespace ctl {
         }
     }
 
-    auto operator<<(std::ostream &o, const quantifier_t &r) -> std::ostream & {
+    auto operator<<(std::ostream &o, const quantifier_op_t &r) -> std::ostream & {
         switch (r) {
-            case quantifier_t::F:
+            case quantifier_op_t::F:
                 return o << "F";
-            case quantifier_t::G:
+            case quantifier_op_t::G:
                 return o << "G";
-            case quantifier_t::U:
+            case quantifier_op_t::U:
                 return o << "U";
-            case quantifier_t::W:
+            case quantifier_op_t::W:
                 return o << "W";
             default:
                 return o << "unknown";
