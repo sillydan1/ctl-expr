@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch interpreter x := 0_ms;",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Debug/ctl_demo",
+            "args": [
+              "-e", "\"E F true\""
+            ],
+            "cwd": "${workspaceFolder}/Debug"
+        }
+    ]
+}
+
