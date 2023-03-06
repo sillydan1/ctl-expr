@@ -11,6 +11,7 @@ namespace ctl {
         virtual auto build_modal(const modal_op_t& op, const syntax_tree_t& tree) -> syntax_tree_t;
         virtual auto build_quantifier(const quantifier_op_t& op, const syntax_tree_t& child) -> syntax_tree_t;
         virtual auto build_quantifier(const quantifier_op_t& op, const syntax_tree_t& child0, const syntax_tree_t& child1) -> syntax_tree_t;
+        virtual auto build_quantifier(const quantifier_op_t& op, const std::vector<syntax_tree_t>& children) -> syntax_tree_t;
         virtual auto build_operator(const expr::operator_type_t& op, const syntax_tree_t& child) -> syntax_tree_t;
         virtual auto build_operator(const expr::operator_type_t& op, const syntax_tree_t& child0, const syntax_tree_t& child1) -> syntax_tree_t;
         virtual auto build_operator(const expr::operator_type_t& op, const std::vector<syntax_tree_t>& children) -> syntax_tree_t;

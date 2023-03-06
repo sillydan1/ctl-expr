@@ -31,7 +31,9 @@ int main(int argc, char** argv) {
         return 0;
     }
     auto result = parse_query(cli_arguments["expression"].as_string());
-    std::cout << "still wip" << std::endl; 
+    int i = 0;
+    for(auto& tree : result) 
+        std::cout << "\t[" << i++ << "] ==> " << tree << "\n";
     return 0; 
 }
 

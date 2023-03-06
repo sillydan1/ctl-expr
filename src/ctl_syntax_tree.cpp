@@ -7,8 +7,8 @@ namespace ctl {
         return o << r.location_name;
     }
 
-    auto operator<<(std::ostream &o, const modal_op_t &r) -> std::ostream & {
-        switch(r) {
+    auto operator<<(std::ostream &o, const modal_t &r) -> std::ostream & {
+        switch(r.operator_type) {
             case modal_op_t::A:
                 return o << "A";
             case modal_op_t::E:
@@ -18,8 +18,8 @@ namespace ctl {
         }
     }
 
-    auto operator<<(std::ostream &o, const quantifier_op_t &r) -> std::ostream & {
-        switch (r) {
+    auto operator<<(std::ostream &o, const quantifier_t &r) -> std::ostream & {
+        switch (r.operator_type) {
             case quantifier_op_t::F:
                 return o << "F";
             case quantifier_op_t::G:
