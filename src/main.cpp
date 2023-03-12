@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 #include <iostream>
-#include "ast-factory.h"
+#include "ctl-lang/ast-factory.h"
 #include "config.h"
 #include "ctl-scanner.hpp"
 #include "ctl-parser.hpp"
