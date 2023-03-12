@@ -24,11 +24,11 @@
 #include "ctl-parser.hpp"
 #include "ctl-scanner.hpp"
 #undef YY_DECL
-#define YY_DECL int ctl::scanner::yylex(ctl::parser::semantic_type* const lval, ctl::parser::location_type* loc)
+#define YY_DECL int ctl::scanner::yylex(ctl::parser::semantic_type* const lval)
 using token = ctl::parser::token;
 #define yyterminate() return( token::END )
 #define YY_NO_UNISTD_H
-#define YY_USER_ACTION loc->step(); loc->columns(yyleng);
+#define YY_USER_ACTION 
 %}
 
 %option c++ noyywrap nodefault
@@ -115,7 +115,7 @@ lloc   [Ll][0-9]+
                 return token::LOCATION;
            }
 <<EOF>>    return token::YYEOF;
-.          throw ctl::parser::syntax_error(*loc, "invalid character: " + std::string(YYText()));
+.          throw ctl::parser::syntax_error("invalid character: " + std::string(YYText()));
 
 %%
 

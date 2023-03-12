@@ -28,13 +28,12 @@
 %define api.namespace { ctl }
 %define api.value.type variant
 %define parse.assert
-%locations
 
 %code requires {
     #include <memory>
     #include "symbol_table.h"
-    #include "ast-factory.h"
-    #include "language-builder.h"
+    #include "ctl-lang/ast-factory.h"
+    #include "ctl-lang/language-builder.h"
 
     namespace ctl {
         class scanner;
@@ -50,7 +49,7 @@
 
 %code {
     #include <iostream>
-    #include "ctl-scanner.hpp"
+    #include "ctl-lang/ctl-scanner.hpp"
     #undef yylex
     #define yylex args.scn->yylex
 }
@@ -159,7 +158,7 @@ lit:
 %%
 /* ================================================== */
 
-void ctl::parser::error(const location_type& l, const std::string& msg) {
-    std::cerr << msg << " at " << l << "\n";
+void ctl::parser::error(const std::string& msg) {
+    std::cerr << msg << "\n";
 }
 

@@ -21,8 +21,12 @@
  * SOFTWARE.
  */
 #include <iostream>
-#include "ctl-lang/ast-factory.h"
+#include <expr-lang/language-builder.h>
+#include <expr-lang/ast-factory.h>
+#include <expr-lang/expr-scanner.hpp>
+#include <expr-lang/expr-parser.hpp>
 #include "config.h"
+#include "ctl-lang/ast-factory.h"
 #include "ctl-scanner.hpp"
 #include "ctl-parser.hpp"
 #include "ctl_syntax_tree.h"
