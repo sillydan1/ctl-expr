@@ -47,7 +47,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
         src)
 
 add_subdirectory(src/ctl-lang)
-target_link_libraries(${PROJECT_NAME} ctl_lang)
+target_link_libraries(${PROJECT_NAME} ctl_lang expr_lang)
 add_executable(${PROJECT_NAME}_demo src/main.cpp)
 target_link_libraries(${PROJECT_NAME}_demo ${PROJECT_NAME} argvparse)
 
