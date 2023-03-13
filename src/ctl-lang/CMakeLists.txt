@@ -40,5 +40,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${FLEX_INCLUDE_DIRS}
     ${BISON_INCLUDE_DIRS}
     .. .)
-target_link_libraries(${PROJECT_NAME} expr)
+target_link_libraries(${PROJECT_NAME} expr_lang)
 

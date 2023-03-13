@@ -64,7 +64,8 @@
 %token <bool> BOOL
 %token <std::string> STRING 
 %token <expr::clock_t> CLOCK
-%nterm <syntax_tree_t> query quantifier predicate exp bin_op mono_op lit
+%nterm <ctl::syntax_tree_t> query quantifier predicate loc
+%nterm <expr::syntax_tree_t> exp bin_op mono_op lit
 
 %left XOR
 %left OR
@@ -107,9 +108,12 @@ predicate:
 | LPAREN query RPAREN IMPLIES LPAREN query RPAREN   { $$ = args.fct->build_operator (expr::operator_type_t::_implies,$2,$6); }
 | LPAREN query RPAREN AND LPAREN query RPAREN       { $$ = args.fct->build_operator (expr::operator_type_t::_and,$2,$6); }
 | LPAREN query RPAREN                               { $$ = args.fct->build_operator (expr::operator_type_t::parentheses, $2); }
-/* TODO: conflicts with LPAREN exp RPAREN */
-| LPAREN predicate RPAREN                           { $$ = args.fct->build_operator (expr::operator_type_t::parentheses, $2); }
-| exp                                               { $$ = $1; }
+| exp                                               { $$ = args.fct->build_expression($1); }
+| loc                                               { $$ = $1; }
+;
+
+loc:
+  LOCATION              { $$ = args.fct->build_location ($1); }
 ;
 
 exp:
@@ -119,40 +123,38 @@ exp:
 ;
 
 bin_op:
-  exp PLUS exp          { $$ = args.fct->build_operator (expr::operator_type_t::plus,$1,$3); }
-| exp MINUS exp         { $$ = args.fct->build_operator (expr::operator_type_t::minus,$1,$3); }
-| exp STAR exp          { $$ = args.fct->build_operator (expr::operator_type_t::star,$1,$3); }
-| exp SLASH exp         { $$ = args.fct->build_operator (expr::operator_type_t::slash,$1,$3); }
-| exp PERCENT exp       { $$ = args.fct->build_operator (expr::operator_type_t::percent,$1,$3); }
-| exp HAT exp           { $$ = args.fct->build_operator (expr::operator_type_t::hat,$1,$3); }
-| exp GT  exp           { $$ = args.fct->build_operator (expr::operator_type_t::gt,$1,$3); }
-| exp GE exp            { $$ = args.fct->build_operator (expr::operator_type_t::ge,$1,$3); }
-| exp EE exp            { $$ = args.fct->build_operator (expr::operator_type_t::ee,$1,$3); }
-| exp NE exp            { $$ = args.fct->build_operator (expr::operator_type_t::ne,$1,$3); }
-| exp LE exp            { $$ = args.fct->build_operator (expr::operator_type_t::le,$1,$3); }
-| exp LT  exp           { $$ = args.fct->build_operator (expr::operator_type_t::lt,$1,$3); }
-| exp OR exp            { $$ = args.fct->build_operator (expr::operator_type_t::_or,$1,$3); }
-| exp XOR exp           { $$ = args.fct->build_operator (expr::operator_type_t::_xor,$1,$3); }
-| exp IMPLIES exp       { $$ = args.fct->build_operator (expr::operator_type_t::_implies,$1,$3); }
-| exp AND exp           { $$ = args.fct->build_operator (expr::operator_type_t::_and,$1,$3); }
+  exp PLUS exp          { $$ = args.fct->expr().build_operator (expr::operator_type_t::plus,$1,$3); }
+| exp MINUS exp         { $$ = args.fct->expr().build_operator (expr::operator_type_t::minus,$1,$3); }
+| exp STAR exp          { $$ = args.fct->expr().build_operator (expr::operator_type_t::star,$1,$3); }
+| exp SLASH exp         { $$ = args.fct->expr().build_operator (expr::operator_type_t::slash,$1,$3); }
+| exp PERCENT exp       { $$ = args.fct->expr().build_operator (expr::operator_type_t::percent,$1,$3); }
+| exp HAT exp           { $$ = args.fct->expr().build_operator (expr::operator_type_t::hat,$1,$3); }
+| exp GT  exp           { $$ = args.fct->expr().build_operator (expr::operator_type_t::gt,$1,$3); }
+| exp GE exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::ge,$1,$3); }
+| exp EE exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::ee,$1,$3); }
+| exp NE exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::ne,$1,$3); }
+| exp LE exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::le,$1,$3); }
+| exp LT  exp           { $$ = args.fct->expr().build_operator (expr::operator_type_t::lt,$1,$3); }
+| exp OR exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::_or,$1,$3); }
+| exp XOR exp           { $$ = args.fct->expr().build_operator (expr::operator_type_t::_xor,$1,$3); }
+| exp IMPLIES exp       { $$ = args.fct->expr().build_operator (expr::operator_type_t::_implies,$1,$3); }
+| exp AND exp           { $$ = args.fct->expr().build_operator (expr::operator_type_t::_and,$1,$3); }
 ;
 
 mono_op:
-  NOT exp               { $$ = args.fct->build_operator (expr::operator_type_t::_not,$2); }
-/* TODO: conflicts with LPAREN predicate RPAREN */
-| LPAREN exp RPAREN     { $$ = args.fct->build_operator (expr::operator_type_t::parentheses,$2); }
+  NOT exp               { $$ = args.fct->expr().build_operator (expr::operator_type_t::_not,$2); }
+| LPAREN exp RPAREN     { $$ = args.fct->expr().build_operator (expr::operator_type_t::parentheses,$2); }
 ;
 
 lit:
-  NUMBER                { $$ = args.fct->build_literal ($1); }
-| MINUS NUMBER          { $$ = args.fct->build_literal (-$2); }
-| FLOAT                 { $$ = args.fct->build_literal ($1); }
-| MINUS FLOAT           { $$ = args.fct->build_literal (-$2); }
-| STRING                { $$ = args.fct->build_literal ($1); }
-| BOOL                  { $$ = args.fct->build_literal ($1); }
-| CLOCK                 { $$ = args.fct->build_literal ($1); }
-| IDENTIFIER            { $$ = args.fct->build_identifier ($1); }
-| LOCATION              { $$ = args.fct->build_location ($1); }
+  NUMBER                { $$ = args.fct->expr().build_literal ($1); }
+| MINUS NUMBER          { $$ = args.fct->expr().build_literal (-$2); }
+| FLOAT                 { $$ = args.fct->expr().build_literal ($1); }
+| MINUS FLOAT           { $$ = args.fct->expr().build_literal (-$2); }
+| STRING                { $$ = args.fct->expr().build_literal ($1); }
+| BOOL                  { $$ = args.fct->expr().build_literal ($1); }
+| CLOCK                 { $$ = args.fct->expr().build_literal ($1); }
+| IDENTIFIER            { $$ = args.fct->expr().build_identifier ($1); }
 ;
 
 %%

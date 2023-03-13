@@ -22,9 +22,16 @@
  */
 #include "ast-factory.h"
 #include "ctl_syntax_tree.h"
+#include "expr-lang/ast-factory.h"
 #include "symbol_table.h"
 
 namespace ctl {
+    ast_factory::ast_factory() : expr_factory{expr::ast_factory{}} {}
+
+    ast_factory::ast_factory(const expr::ast_factory& expr) : expr_factory{expr} {}
+
+    ast_factory::~ast_factory() {}
+
     auto ast_factory::build_modal(const modal_op_t& op, const syntax_tree_t& tree) -> syntax_tree_t {
         return syntax_tree_t{modal_t{op}}.concat(tree); 
     }
@@ -73,6 +80,14 @@ namespace ctl {
 
     auto ast_factory::build_root(const syntax_tree_t& child) -> syntax_tree_t {
         return syntax_tree_t{}.concat(child);
+    }
+
+    auto ast_factory::build_expression(const expr::syntax_tree_t& expression) -> syntax_tree_t {
+        return syntax_tree_t{expression};
+    }
+
+    auto ast_factory::expr() -> expr::ast_factory& {
+        return expr_factory;
     }
 }
 
