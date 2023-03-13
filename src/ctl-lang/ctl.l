@@ -46,6 +46,7 @@ bool   [Ff]alse|[Tt]rue
 str    \"(\\.|[^\\"])*\"
 blank  [ \t\r]
 
+/* NOTE: The order of the following rules are important. e.g. a symbol identifier cannot be a uuid (because it is overridden) */
 %%
 
 {blank}+   /* nothing */
@@ -108,7 +109,6 @@ blank  [ \t\r]
                 lval->build<std::string>(std::string{YYText()});
                 return token::LOCATION;
            }
-/* NOTE: The order here is important here */
 {id}       { 
                 lval->build<std::string>(std::string{YYText()}); 
                 return token::IDENTIFIER; 
