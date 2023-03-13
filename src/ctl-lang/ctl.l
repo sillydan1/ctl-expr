@@ -36,6 +36,8 @@ using token = ctl::parser::token;
 %option outfile="ctl-scanner.cpp"
 
 /* ================================================== */
+uuid   [0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
+lloc   [Ll][0-9]+
 id     [a-z_A-Z]([.\(\)a-zA-Z_0-9]*[a-zA-Z_0-9]+)?
 int    [0-9]+[Ll]?
 clk    [0-9]+(_ms)
@@ -43,10 +45,6 @@ flt    [0-9]+[.][0-9]+[fd]?
 bool   [Ff]alse|[Tt]rue
 str    \"(\\.|[^\\"])*\"
 blank  [ \t\r]
-
-uuid   [0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
-/* TODO: Conflicts with {id}! */
-lloc   [Ll][0-9]+
 
 %%
 
@@ -102,10 +100,6 @@ lloc   [Ll][0-9]+
                 lval->build<std::string>(s.substr(1, s.size()-2)); 
                 return token::STRING; 
            }
-{id}       { 
-                lval->build<std::string>(std::string{YYText()}); 
-                return token::IDENTIFIER; 
-           }
 {uuid}     {
                 lval->build<std::string>(std::string{YYText()});
                 return token::LOCATION;
@@ -113,6 +107,11 @@ lloc   [Ll][0-9]+
 {lloc}     {
                 lval->build<std::string>(std::string{YYText()});
                 return token::LOCATION;
+           }
+/* NOTE: The order here is important here */
+{id}       { 
+                lval->build<std::string>(std::string{YYText()}); 
+                return token::IDENTIFIER; 
            }
 <<EOF>>    return token::YYEOF;
 .          throw ctl::parser::syntax_error("invalid character: " + std::string(YYText()));
