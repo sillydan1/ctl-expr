@@ -3,6 +3,7 @@
 #include <string>
 #include "ctl_syntax_tree.h"
 #include "ctl_parser.hpp"
+#undef YY_DECL
 #define YY_DECL ctl::parser::symbol_type ctllex (ctl::driver* drv)
 YY_DECL;
 
