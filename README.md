@@ -22,6 +22,7 @@ that prints the AST to stdout
 #include <ctl_compiler.h>
 
 // Add symbols to the context, so they can be referenced
+// use --environment "a := 0" in the ctl_demo binary.
 expr::symbol_table_t symbols{};
 symbols["a"] = 0;
 
@@ -29,6 +30,7 @@ symbols["a"] = 0;
 ctl::compiler compiler{&symbols};
 
 // Parse the CTL expression and check for syntax-success
+// use --expression "E F a > 3" in the ctl_demo binary.
 int result_code = compiler.parse("E F a > 3");
 if(result_code != 0)
     throw std::exception(compiler.error);
