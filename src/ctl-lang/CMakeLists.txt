@@ -29,8 +29,7 @@ set(${PROJECT_NAME}_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE STRING "${PROJEC
 BISON_TARGET(ctl_parser ctl.y ${CMAKE_CURRENT_BINARY_DIR}/ctl-parser.cpp)
 FLEX_TARGET(ctl_lexer ctl.l ${CMAKE_CURRENT_BINARY_DIR}/ctl-scanner.cpp)
 ADD_FLEX_BISON_DEPENDENCY(ctl_lexer ctl_parser)
-add_library(${PROJECT_NAME} STATIC ${BISON_ctl_parser_OUTPUTS} ${FLEX_ctl_lexer_OUTPUTS} ast-factory.cpp language-builder.cpp)
-set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+add_library(${PROJECT_NAME} SHARED ${BISON_ctl_parser_OUTPUTS} ${FLEX_ctl_lexer_OUTPUTS} ast-factory.cpp language-builder.cpp)
 target_include_directories(${PROJECT_NAME} PUBLIC 
     ${CMAKE_CURRENT_BINARY_DIR} 
     ${yaoverload_SOURCE_DIR}/include
