@@ -49,7 +49,8 @@ auto parse_query(const std::string& s) -> std::vector<ctl::syntax_tree_t> {
 
 int main(int argc, char** argv) {
     std::vector<option_t> my_options = {
-        {"expression", 'e',    argument_requirement::REQUIRE_ARG, "(required) provide the expression to process"},
+        {"expression",  'e', argument_requirement::REQUIRE_ARG, "(required) provide the expression to process"},
+        //{"environment", 'E', argument_requirement::REQUIRE_ARG, "provide an expr environment"},
     };
     auto cli_arguments = get_arguments(my_options, argc, argv);
     if(cli_arguments["help"] || !cli_arguments["expression"]) {

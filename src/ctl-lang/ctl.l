@@ -121,3 +121,9 @@ blank  [ \t\r]
 
 /* ================================================== */
 
+namespace ctl {
+    scanner::scanner(std::istream& arg_yyin, std::ostream& arg_yyout, ast_factory* fct) : ctlFlexLexer{arg_yyin, arg_yyout}, fct(fct) {}
+    scanner::scanner(std::istream* arg_yyin, std::ostream* arg_yyout, ast_factory* fct) : ctlFlexLexer{arg_yyin, arg_yyout}, fct(fct) {}
+    scanner::~scanner() {}
+}
+
