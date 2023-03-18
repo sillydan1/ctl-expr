@@ -31,6 +31,8 @@
 #include "ctl-parser.hpp"
 #include "ctl_syntax_tree.h"
 #include "language-builder.h"
+#include "symbol_table.h"
+#include <generic-driver.h>
 #include <argvparse.h>
 #include <sstream>
 #include <stdexcept>
@@ -50,16 +52,24 @@ auto parse_query(const std::string& s) -> std::vector<ctl::syntax_tree_t> {
 int main(int argc, char** argv) {
     std::vector<option_t> my_options = {
         {"expression",  'e', argument_requirement::REQUIRE_ARG, "(required) provide the expression to process"},
-        //{"environment", 'E', argument_requirement::REQUIRE_ARG, "provide an expr environment"},
     };
     auto cli_arguments = get_arguments(my_options, argc, argv);
-    if(cli_arguments["help"] || !cli_arguments["expression"]) {
+    if(cli_arguments["help"]) {
         std::cout << PROJECT_NAME << " v" << PROJECT_VER << "\n" << "OPTIONS:\n" << my_options;
         return 0;
     }
-    auto result = parse_query(cli_arguments["expression"].as_string());
+    std::string expression = cli_arguments["expression"].as_string_or_default("-");
+    if(expression == "-") {
+        std::rewind(stdin);
+        std::cout << "provide CTL expressions (seperated by ';'). End with <<EOF>> (ctrl+d):\n<<\n";
+        std::istreambuf_iterator<char> begin(std::cin), end;
+        expression = std::string(begin, end);
+        std::cout << "\n>>\n";
+    }
+
     int i = 0;
-    for(auto& tree : result) 
+    std::cout << "parsed AST(s):\n";
+    for(auto& tree : parse_query(expression)) 
         std::cout << "\t[" << i++ << "] ==> " << tree << "\n";
     return 0; 
 }
