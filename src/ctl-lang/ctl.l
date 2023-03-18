@@ -34,6 +34,7 @@ using token = ctl::parser::token;
 %option c++ noyywrap nodefault
 %option yyclass="ctl::scanner"
 %option outfile="ctl-scanner.cpp"
+%option prefix="ctl"
 
 /* ================================================== */
 uuid   [0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}

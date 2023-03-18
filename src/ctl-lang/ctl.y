@@ -28,6 +28,7 @@
 %define api.namespace { ctl }
 %define api.value.type variant
 %define parse.assert
+%define parse.trace true
 
 %code requires {
     #include <memory>
