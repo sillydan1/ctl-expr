@@ -20,11 +20,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef EXPR_CONFIG_H_IN_H
-#define EXPR_CONFIG_H_IN_H
-#define PROJECT_NAME "@PROJECT_NAME@"
-#define PROJECT_VER  "@PROJECT_VERSION@"
-#define PROJECT_VER_MAJOR @PROJECT_VERSION_MAJOR@
-#define PROJECT_VER_MINOR @PROJECT_VERSION_MINOR@
-#define PROJECT_VER_PATCH @PROJECT_VERSION_PATCH@
-#endif //EXPR_CONFIG_H_IN_H
+#ifndef CTL_LANG_LANGUAGE_BUILDER_H
+#define CTL_LANG_LANGUAGE_BUILDER_H
+#include "../ctl_syntax_tree.h"
+
+namespace ctl {
+    class language_builder {
+    public:
+        language_builder() = default;
+        virtual ~language_builder() = default;
+        virtual auto add_query(const syntax_tree_t& tree) -> language_builder& = 0;
+    };
+
+    class multi_query_builder : public language_builder {
+    public:
+        struct result_t {
+            std::vector<syntax_tree_t> queries;
+        };
+        auto add_query(const syntax_tree_t& tree) -> multi_query_builder& override;
+        virtual auto build() -> result_t;
+    private:
+        result_t result{};
+    };
+}
+
+#endif
+

@@ -12,5 +12,5 @@ _deps
 cmake-build-*
 .idea
 .DS_Store
-.cache
 Debug/
+.cache

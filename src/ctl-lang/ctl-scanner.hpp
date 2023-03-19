@@ -20,11 +20,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef EXPR_CONFIG_H_IN_H
-#define EXPR_CONFIG_H_IN_H
-#define PROJECT_NAME "@PROJECT_NAME@"
-#define PROJECT_VER  "@PROJECT_VERSION@"
-#define PROJECT_VER_MAJOR @PROJECT_VERSION_MAJOR@
-#define PROJECT_VER_MINOR @PROJECT_VERSION_MINOR@
-#define PROJECT_VER_PATCH @PROJECT_VERSION_PATCH@
-#endif //EXPR_CONFIG_H_IN_H
+#ifndef CTL_SCANNER_HPP
+#define CTL_SCANNER_HPP
+#include "ast-factory.h"
+#if ! defined(yyFlexLexerOnce)
+#include <FlexLexer.h>
+#endif
+
+#include "ctl-parser.hpp"
+
+namespace ctl {
+    class scanner : public yyFlexLexer {
+    public:
+        scanner(std::istream& arg_yyin, std::ostream& arg_yyout, ast_factory* fct);
+        scanner(std::istream* arg_yyin = nullptr, std::ostream* arg_yyout = nullptr, ast_factory* fct = nullptr);
+        virtual ~scanner();
+        virtual int yylex(parser::semantic_type* const lval);
+    private:
+        ast_factory* fct = nullptr;
+    };
+}
+
+#endif
+

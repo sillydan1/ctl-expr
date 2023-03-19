@@ -20,11 +20,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef EXPR_CONFIG_H_IN_H
-#define EXPR_CONFIG_H_IN_H
-#define PROJECT_NAME "@PROJECT_NAME@"
-#define PROJECT_VER  "@PROJECT_VERSION@"
-#define PROJECT_VER_MAJOR @PROJECT_VERSION_MAJOR@
-#define PROJECT_VER_MINOR @PROJECT_VERSION_MINOR@
-#define PROJECT_VER_PATCH @PROJECT_VERSION_PATCH@
-#endif //EXPR_CONFIG_H_IN_H
+#include "ast-factory.h"
+#include "language-builder.h"
+
+namespace ctl {
+    auto multi_query_builder::add_query(const syntax_tree_t& tree) -> multi_query_builder& {
+        result.queries.push_back(tree);
+        return *this;
+    }
+
+    auto multi_query_builder::build() -> result_t {
+        return result;
+    }
+}
+

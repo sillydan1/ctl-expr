@@ -20,34 +20,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 cmake_minimum_required(VERSION 3.18)
-project(ctl VERSION 2.0.0)
-configure_file(src/config.h.in config.h)
-include(cmake/CPM.cmake)
+project(ctl_lang VERSION 2.0.0)
 set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD_REQUIRED ON)
-CPMAddPackage(NAME expr VERSION 3.0.0 GITHUB_REPOSITORY sillydan1/expr OPTIONS "ENABLE_Z3 OFF")
-CPMAddPackage("gh:sillydan1/argvparse@1.2.3")
-CPMAddPackage("gh:yalibs/yatree@1.2.1")
-CPMAddPackage("gh:yalibs/yaoverload@1.0.0")
-CPMAddPackage("gh:yalibs/yahashcombine@1.0.0")
-
-add_library(${PROJECT_NAME} SHARED src/ctl_syntax_tree.cpp)
-
-target_include_directories(${PROJECT_NAME} PUBLIC
-        ${expr_SOURCE_DIR}/include
-        ${expr_SOURCE_DIR}/src
-        ${expr_BUILD_DIR}
-        ${yatree_SOURCE_DIR}/include
-        ${yaoverload_SOURCE_DIR}/include
-        ${yahashcombine_SOURCE_DIR}/include
-        ${argvparse_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_BINARY_DIR}
-        src/ctl-lang
-        include
-        src)
-
-add_subdirectory(src/ctl-lang)
-target_link_libraries(${PROJECT_NAME} ctl_lang)
-add_executable(${PROJECT_NAME}_demo src/main.cpp)
-target_link_libraries(${PROJECT_NAME}_demo ${PROJECT_NAME} argvparse)
+find_package(FLEX REQUIRED)
+find_package(BISON REQUIRED)
+set(${PROJECT_NAME}_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE STRING "${PROJECT_NAME}_BUILD_DIR" FORCE) # CPM compatibility
+BISON_TARGET(ctl_parser ctl.y ${CMAKE_CURRENT_BINARY_DIR}/ctl-parser.cpp)
+FLEX_TARGET(ctl_lexer ctl.l ${CMAKE_CURRENT_BINARY_DIR}/ctl-scanner.cpp)
+ADD_FLEX_BISON_DEPENDENCY(ctl_lexer ctl_parser)
+add_library(${PROJECT_NAME} SHARED ${BISON_ctl_parser_OUTPUTS} ${FLEX_ctl_lexer_OUTPUTS} ast-factory.cpp language-builder.cpp)
+target_include_directories(${PROJECT_NAME} PUBLIC 
+    ${CMAKE_CURRENT_BINARY_DIR} 
+    ${yaoverload_SOURCE_DIR}/include
+    ${yatree_SOURCE_DIR}/include
+    ${yatimer_SOURCE_DIR}/include
+    ${yahashcombine_SOURCE_DIR}/include
+    ${argvparse_SOURCE_DIR}/include
+    ${FLEX_INCLUDE_DIRS}
+    ${BISON_INCLUDE_DIRS}
+    .. .)
+target_link_libraries(${PROJECT_NAME} expr_lang)
 
