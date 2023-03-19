@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch interpreter x := 0_ms;",
+            "name": "Launch demo E F true",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/Debug/ctl_demo",
