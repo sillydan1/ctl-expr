@@ -25,6 +25,7 @@
 #include <expr-lang/ast-factory.h>
 #include <expr-lang/expr-scanner.hpp>
 #include <expr-lang/expr-parser.hpp>
+#include "_deps/argvparse-src/src/arguments.h"
 #include "config.h"
 #include "ctl-lang/ast-factory.h"
 #include "ctl-scanner.hpp"
@@ -37,13 +38,14 @@
 #include <sstream>
 #include <stdexcept>
 
-auto parse_query(const std::string& s) -> std::vector<ctl::syntax_tree_t> {
+auto parse_query(const std::string& s, unsigned int debug_level) -> std::vector<ctl::syntax_tree_t> {
     std::istringstream iss{s};
     ctl::ast_factory factory{};
     ctl::multi_query_builder builder{};
     ctl::scanner scn{iss, std::cerr, &factory};
     ctl::parser_args pargs{&scn, &factory, &builder};
     ctl::parser p{pargs};
+    p.set_debug_level(debug_level);
     if(p.parse() != 0)
         throw std::logic_error("unable to parse query expression");
     return builder.build().queries;
@@ -52,6 +54,7 @@ auto parse_query(const std::string& s) -> std::vector<ctl::syntax_tree_t> {
 int main(int argc, char** argv) {
     std::vector<option_t> my_options = {
         {"expression",  'e', argument_requirement::REQUIRE_ARG, "(required) provide the expression to process"},
+        {"debug-level", 'd', argument_requirement::REQUIRE_ARG, "set parser debug level. Default is: 0"},
     };
     auto cli_arguments = get_arguments(my_options, argc, argv);
     if(cli_arguments["help"]) {
@@ -69,7 +72,7 @@ int main(int argc, char** argv) {
 
     int i = 0;
     std::cout << "parsed AST(s):\n";
-    for(auto& tree : parse_query(expression)) 
+    for(auto& tree : parse_query(expression, cli_arguments["debug-level"].as_integer_or_default(0))) 
         std::cout << "\t[" << i++ << "] ==> " << tree << "\n";
     return 0; 
 }
