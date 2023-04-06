@@ -53,6 +53,12 @@ blank  [ \t\r]
 {blank}+   /* nothing */
 \n+        /* nothing */
 
+"AX"       return token::AX;
+"EX"       return token::EX;
+"AF"       return token::AF;
+"EF"       return token::EF;
+"AG"       return token::AG;
+"EG"       return token::EG;
 "A"        return token::FORALL;
 "E"        return token::EXISTS;
 "F"        return token::FINALLY;

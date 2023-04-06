@@ -29,6 +29,7 @@
 %define api.value.type variant
 %define parse.assert
 %define parse.trace true
+%define parse.error detailed
 
 %code requires {
     #include <memory>
@@ -59,13 +60,14 @@
 %token YYEOF 0
 %token MINUS PLUS STAR SLASH PERCENT HAT AND OR XOR IMPLIES GT GE EE NE LE LT NOT LPAREN RPAREN ASSIGN TERM
 %token FORALL EXISTS FINALLY GLOBALLY NEXT UNTIL WEAK_UNTIL
+%token AX EX AG EG AF EF
 %token <std::string> IDENTIFIER LOCATION
 %token <int> NUMBER
 %token <float> FLOAT
 %token <bool> BOOL
 %token <std::string> STRING 
 %token <expr::clock_t> CLOCK
-%nterm <ctl::syntax_tree_t> query quantifier predicate loc
+%nterm <ctl::syntax_tree_t> qq
 %nterm <expr::syntax_tree_t> exp bin_op mono_op lit
 
 %left XOR
@@ -81,48 +83,48 @@
 %start unit;
 
 unit:
-  %empty            { }
-| queries           { }
-| queries TERM unit { }
+  %empty { }
+| qqs    { }
 ;
 
-queries:
-  query             { args.builder->add_query(args.fct->build_root($1)); }
+qqs:
+  qq          { args.builder->add_query(args.fct->build_root($1)); }
+| qq TERM qqs { args.builder->add_query(args.fct->build_root($1)); }
 ;
 
-query:
-  FORALL quantifier { $$ = args.fct->build_modal (ctl::modal_op_t::A, $2); } 
-| EXISTS quantifier { $$ = args.fct->build_modal (ctl::modal_op_t::E, $2); }
-;
-
-quantifier:
-  NEXT predicate                  { $$ = args.fct->build_quantifier (quantifier_op_t::X, $2); }
-| GLOBALLY predicate              { $$ = args.fct->build_quantifier (quantifier_op_t::G, $2); }
-| FINALLY predicate               { $$ = args.fct->build_quantifier (quantifier_op_t::F, $2); }
-| predicate UNTIL predicate       { $$ = args.fct->build_quantifier (quantifier_op_t::U, $1, $3); }
-| predicate WEAK_UNTIL predicate  { $$ = args.fct->build_quantifier (quantifier_op_t::W, $1, $3); }
-;
-
-predicate:
-  LPAREN query RPAREN OR LPAREN query RPAREN        { $$ = args.fct->build_operator (expr::operator_type_t::_or,$2,$6); }
-| LPAREN query RPAREN XOR LPAREN query RPAREN       { $$ = args.fct->build_operator (expr::operator_type_t::_xor,$2,$6); }
-| LPAREN query RPAREN IMPLIES LPAREN query RPAREN   { $$ = args.fct->build_operator (expr::operator_type_t::_implies,$2,$6); }
-| LPAREN query RPAREN AND LPAREN query RPAREN       { $$ = args.fct->build_operator (expr::operator_type_t::_and,$2,$6); }
-| LPAREN query RPAREN                               { $$ = args.fct->build_operator (expr::operator_type_t::parentheses, $2); }
-| exp                                               { $$ = args.fct->build_expression($1); }
-| loc                                               { $$ = $1; }
-;
-
-loc:
-  LOCATION              { $$ = args.fct->build_location ($1); }
+qq:
+  AX qq                                 { $$ = args.fct->build_modal(ctl::modal_op_t::A, args.fct->build_quantifier(ctl::quantifier_op_t::X, $2)); }
+| FORALL NEXT qq                        { $$ = args.fct->build_modal(ctl::modal_op_t::A, args.fct->build_quantifier(ctl::quantifier_op_t::X, $3)); }
+| EX qq                                 { $$ = args.fct->build_modal(ctl::modal_op_t::E, args.fct->build_quantifier(ctl::quantifier_op_t::X, $2)); }
+| EXISTS NEXT qq                        { $$ = args.fct->build_modal(ctl::modal_op_t::E, args.fct->build_quantifier(ctl::quantifier_op_t::X, $3)); }
+| AF qq                                 { $$ = args.fct->build_modal(ctl::modal_op_t::A, args.fct->build_quantifier(ctl::quantifier_op_t::F, $2)); }
+| FORALL FINALLY qq                     { $$ = args.fct->build_modal(ctl::modal_op_t::A, args.fct->build_quantifier(ctl::quantifier_op_t::F, $3)); }
+| EF qq                                 { $$ = args.fct->build_modal(ctl::modal_op_t::E, args.fct->build_quantifier(ctl::quantifier_op_t::F, $2)); }
+| EXISTS FINALLY qq                     { $$ = args.fct->build_modal(ctl::modal_op_t::E, args.fct->build_quantifier(ctl::quantifier_op_t::F, $3)); }
+| AG qq                                 { $$ = args.fct->build_modal(ctl::modal_op_t::A, args.fct->build_quantifier(ctl::quantifier_op_t::G, $2)); }
+| FORALL GLOBALLY qq                    { $$ = args.fct->build_modal(ctl::modal_op_t::A, args.fct->build_quantifier(ctl::quantifier_op_t::G, $3)); }
+| EG qq                                 { $$ = args.fct->build_modal(ctl::modal_op_t::E, args.fct->build_quantifier(ctl::quantifier_op_t::G, $2)); }
+| EXISTS GLOBALLY qq                    { $$ = args.fct->build_modal(ctl::modal_op_t::E, args.fct->build_quantifier(ctl::quantifier_op_t::G, $3)); }
+| FORALL LPAREN qq UNTIL qq RPAREN      { $$ = args.fct->build_modal(ctl::modal_op_t::A, args.fct->build_quantifier(ctl::quantifier_op_t::U, $3, $5)); }
+| EXISTS LPAREN qq UNTIL qq RPAREN      { $$ = args.fct->build_modal(ctl::modal_op_t::E, args.fct->build_quantifier(ctl::quantifier_op_t::U, $3, $5)); }
+| FORALL LPAREN qq WEAK_UNTIL qq RPAREN { $$ = args.fct->build_modal(ctl::modal_op_t::A, args.fct->build_quantifier(ctl::quantifier_op_t::W, $3, $5)); }
+| EXISTS LPAREN qq WEAK_UNTIL qq RPAREN { $$ = args.fct->build_modal(ctl::modal_op_t::E, args.fct->build_quantifier(ctl::quantifier_op_t::W, $3, $5)); }
+| exp                                   { $$ = args.fct->build_expression($1); }
+| LOCATION                              { $$ = args.fct->build_location ($1); }
+| LPAREN NOT qq RPAREN                  { $$ = args.fct->build_operator(expr::operator_type_t::_not, $3); }
+| LPAREN qq OR qq RPAREN                { $$ = args.fct->build_operator(expr::operator_type_t::_or, $2, $4); }
+| LPAREN qq XOR qq RPAREN               { $$ = args.fct->build_operator(expr::operator_type_t::_xor, $2, $4); }
+| LPAREN qq AND qq RPAREN               { $$ = args.fct->build_operator(expr::operator_type_t::_and, $2, $4); }
+| LPAREN qq IMPLIES qq RPAREN           { $$ = args.fct->build_operator(expr::operator_type_t::_implies, $2, $4); }
 ;
 
 exp:
-  lit                   { $$ = $1; }
-| bin_op                { $$ = $1; }
-| mono_op               { $$ = $1; }
+  lit     { $$ = $1; }
+| bin_op  { $$ = $1; }
+| mono_op { $$ = $1; }
 ;
 
+// boolean comparators are being handled in the qq rule
 bin_op:
   exp PLUS exp          { $$ = args.fct->expr().build_operator (expr::operator_type_t::plus,$1,$3); }
 | exp MINUS exp         { $$ = args.fct->expr().build_operator (expr::operator_type_t::minus,$1,$3); }
@@ -130,21 +132,17 @@ bin_op:
 | exp SLASH exp         { $$ = args.fct->expr().build_operator (expr::operator_type_t::slash,$1,$3); }
 | exp PERCENT exp       { $$ = args.fct->expr().build_operator (expr::operator_type_t::percent,$1,$3); }
 | exp HAT exp           { $$ = args.fct->expr().build_operator (expr::operator_type_t::hat,$1,$3); }
-| exp GT  exp           { $$ = args.fct->expr().build_operator (expr::operator_type_t::gt,$1,$3); }
+| exp GT exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::gt,$1,$3); }
 | exp GE exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::ge,$1,$3); }
 | exp EE exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::ee,$1,$3); }
 | exp NE exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::ne,$1,$3); }
 | exp LE exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::le,$1,$3); }
-| exp LT  exp           { $$ = args.fct->expr().build_operator (expr::operator_type_t::lt,$1,$3); }
-| exp OR exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::_or,$1,$3); }
-| exp XOR exp           { $$ = args.fct->expr().build_operator (expr::operator_type_t::_xor,$1,$3); }
-| exp IMPLIES exp       { $$ = args.fct->expr().build_operator (expr::operator_type_t::_implies,$1,$3); }
-| exp AND exp           { $$ = args.fct->expr().build_operator (expr::operator_type_t::_and,$1,$3); }
+| exp LT exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::lt,$1,$3); }
 ;
 
+// boolean not-operator is being handled in the qq rule
 mono_op:
-  NOT exp               { $$ = args.fct->expr().build_operator (expr::operator_type_t::_not,$2); }
-| LPAREN exp RPAREN     { $$ = args.fct->expr().build_operator (expr::operator_type_t::parentheses,$2); }
+ LPAREN exp RPAREN     { $$ = args.fct->expr().build_operator (expr::operator_type_t::parentheses,$2); }
 ;
 
 lit:
