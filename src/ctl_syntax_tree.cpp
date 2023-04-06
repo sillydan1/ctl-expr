@@ -42,6 +42,8 @@ namespace ctl {
 
     auto operator<<(std::ostream &o, const quantifier_t &r) -> std::ostream & {
         switch (r.operator_type) {
+            case quantifier_op_t::X:
+                return o << "X";
             case quantifier_op_t::F:
                 return o << "F";
             case quantifier_op_t::G:
