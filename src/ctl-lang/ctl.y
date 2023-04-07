@@ -68,7 +68,7 @@
 %token <std::string> STRING 
 %token <expr::clock_t> CLOCK
 %nterm <ctl::syntax_tree_t> qq
-%nterm <expr::syntax_tree_t> exp bin_op mono_op lit
+%nterm <expr::syntax_tree_t> exp op lit
 
 %left XOR
 %left OR
@@ -109,23 +109,23 @@ qq:
 | EXISTS LPAREN qq UNTIL qq RPAREN      { $$ = args.fct->build_modal(ctl::modal_op_t::E, args.fct->build_quantifier(ctl::quantifier_op_t::U, $3, $5)); }
 | FORALL LPAREN qq WEAK_UNTIL qq RPAREN { $$ = args.fct->build_modal(ctl::modal_op_t::A, args.fct->build_quantifier(ctl::quantifier_op_t::W, $3, $5)); }
 | EXISTS LPAREN qq WEAK_UNTIL qq RPAREN { $$ = args.fct->build_modal(ctl::modal_op_t::E, args.fct->build_quantifier(ctl::quantifier_op_t::W, $3, $5)); }
-| exp                                   { $$ = args.fct->build_expression($1); }
-| LOCATION                              { $$ = args.fct->build_location ($1); }
-| LPAREN NOT qq RPAREN                  { $$ = args.fct->build_operator(expr::operator_type_t::_not, $3); }
+| NOT qq                                { $$ = args.fct->build_operator(expr::operator_type_t::_not, $2); }
 | LPAREN qq OR qq RPAREN                { $$ = args.fct->build_operator(expr::operator_type_t::_or, $2, $4); }
 | LPAREN qq XOR qq RPAREN               { $$ = args.fct->build_operator(expr::operator_type_t::_xor, $2, $4); }
 | LPAREN qq AND qq RPAREN               { $$ = args.fct->build_operator(expr::operator_type_t::_and, $2, $4); }
 | LPAREN qq IMPLIES qq RPAREN           { $$ = args.fct->build_operator(expr::operator_type_t::_implies, $2, $4); }
+| exp                                   { $$ = args.fct->build_expression($1); }
+| LOCATION                              { $$ = args.fct->build_location ($1); }
+| LPAREN qq RPAREN                      { $$ = $2; }
 ;
 
 exp:
-  lit     { $$ = $1; }
-| bin_op  { $$ = $1; }
-| mono_op { $$ = $1; }
+  lit { $$ = $1; }
+| op  { $$ = $1; }
 ;
 
 // boolean comparators are being handled in the qq rule
-bin_op:
+op:
   exp PLUS exp          { $$ = args.fct->expr().build_operator (expr::operator_type_t::plus,$1,$3); }
 | exp MINUS exp         { $$ = args.fct->expr().build_operator (expr::operator_type_t::minus,$1,$3); }
 | exp STAR exp          { $$ = args.fct->expr().build_operator (expr::operator_type_t::star,$1,$3); }
@@ -138,11 +138,6 @@ bin_op:
 | exp NE exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::ne,$1,$3); }
 | exp LE exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::le,$1,$3); }
 | exp LT exp            { $$ = args.fct->expr().build_operator (expr::operator_type_t::lt,$1,$3); }
-;
-
-// boolean not-operator is being handled in the qq rule
-mono_op:
- LPAREN exp RPAREN     { $$ = args.fct->expr().build_operator (expr::operator_type_t::parentheses,$2); }
 ;
 
 lit:
