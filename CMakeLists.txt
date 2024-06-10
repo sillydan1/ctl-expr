@@ -28,9 +28,9 @@ set(CXX_STANDARD_REQUIRED ON)
 
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
-CPMAddPackage(NAME expr GIT_TAG 3.0.3 GITHUB_REPOSITORY sillydan1/expr OPTIONS "ENABLE_Z3 OFF")
+CPMAddPackage(NAME expr VERSION 3.0.4 GITHUB_REPOSITORY sillydan1/expr OPTIONS "ENABLE_Z3 OFF")
 CPMAddPackage("gh:sillydan1/argvparse@1.2.3")
-CPMAddPackage("gh:yalibs/yatree@1.2.1")
+CPMAddPackage("gh:yalibs/yatree@1.2.2")
 CPMAddPackage("gh:yalibs/yaoverload@1.0.0")
 CPMAddPackage("gh:yalibs/yahashcombine@1.0.0")
 
