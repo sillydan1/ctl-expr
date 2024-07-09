@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 cmake_minimum_required(VERSION 3.18)
-project(ctl VERSION 2.0.0)
+project(ctl VERSION 2.0.4)
 configure_file(src/config.h.in config.h)
 include(cmake/CPM.cmake)
 set(CMAKE_CXX_STANDARD 20)
@@ -28,11 +28,11 @@ set(CXX_STANDARD_REQUIRED ON)
 
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
-CPMAddPackage(NAME expr VERSION 3.0.4 GITHUB_REPOSITORY sillydan1/expr OPTIONS "ENABLE_Z3 OFF")
+CPMAddPackage(NAME expr VERSION 3.0.6 GITHUB_REPOSITORY sillydan1/expr OPTIONS "ENABLE_Z3 OFF")
 CPMAddPackage("gh:sillydan1/argvparse@1.2.3")
 CPMAddPackage("gh:yalibs/yatree@1.2.2")
-CPMAddPackage("gh:yalibs/yaoverload@1.0.0")
-CPMAddPackage("gh:yalibs/yahashcombine@1.0.0")
+CPMAddPackage("gh:yalibs/yaoverload@1.0.1")
+CPMAddPackage("gh:yalibs/yahashcombine@1.0.1")
 
 add_library(${PROJECT_NAME} SHARED src/ctl_syntax_tree.cpp)
 
@@ -53,4 +53,3 @@ add_subdirectory(src/ctl-lang)
 target_link_libraries(${PROJECT_NAME} ctl_lang)
 add_executable(${PROJECT_NAME}_demo src/main.cpp)
 target_link_libraries(${PROJECT_NAME}_demo ${PROJECT_NAME} argvparse)
-
